@@ -1,0 +1,24 @@
+{
+  "name": "homework",
+  "version": "0.0.1",
+  "description": "Immuta Homework Assignment",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "async": "2.4.1",
+    "bluebird": "3.5.0",
+    "boom": "4.3.1",
+    "hapi": "16.1.1",
+    "inert": "4.2.0",
+    "joi": "10.6.0",
+    "request": "2.81.0",
+    "request-promise": "4.2.2",
+    "angular": "1.5.8",
+    "angular-bootstrap": "0.12.2",
+    "angular-simple-logger": "0.1.7",
+    "leaflet": "1.3.1",
+    "ui-leaflet": "1.0.3"
+  }
+}
