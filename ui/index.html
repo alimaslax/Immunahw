@@ -1,14 +1,47 @@
 <html ng-app="immuta.homework">
-    <head>
-        <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css">
 
-        <script src="node_modules/angular/angular.min.js"></script>
-        <script src="node_modules/leaflet/dist/leaflet.js"></script>
-        <script src="node_modules/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
-        <script src="node_modules/ui-leaflet/dist/ui-leaflet.min.js"></script>
-        <script src="app.js"></script>
-    </head>
-    <body ng-controller="MapController as map">
-        <leaflet width="100%" height="480px" id="map-simple-map"></leaflet>
-    </body>
+<head>
+  <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="shortcut icon" sizes="16x16" href="assets/icons/icon.png" type="image/png" />
+  <!-- load bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+  <!-- load app modules -->
+  <script src="node_modules/angular/angular.min.js"></script>
+  <script src="node_modules/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
+  <script src="node_modules/leaflet/dist/leaflet.js"></script>
+  <script src="node_modules/ui-leaflet/dist/ui-leaflet.min.js"></script>
+  <script src="controllers.js"></script>
+  <script src="components/map/map.module.js"></script>
+  <script src="components/map/map.component.js"></script>
+  <script src="components/table/table.module.js"></script>
+  <script src="components/table/table.component.js"></script>
+  <script src="app.js"></script>
+</head>
+
+<body>
+  <div class="toolbar">
+    <img width="40" alt="Angular Logo" src="assets/icons/icon.png" />
+    <span>Maryland Spending</span>
+    <div class="spacer"></div>
+    </a>
+  </div>
+  <div class="body">
+    <map-component>
+    </map-component>
+    <table-component>
+    </table-component>
+  </div>
+</body>
+
 </html>

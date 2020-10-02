@@ -38,3 +38,87 @@ When you are finished, tar.gz all the files (minus node_modules please), and sen
 You may need to send a Google Drive or similar link if your email provider doesn't like zipped up javascript files.
 
 # Updates to Project
+There are several updates I have made to the project described below. The application pulls in data from opendata.marland.gov and assess the fiscal year 2015, 
+although it could be easily modified to assess any year that the Api supports (which as of writing this is from FY2008 to FY2019).  The application has the following 
+features which I will describe further on the [A brief description of what you did] section of this readme.
+
+Snapshot of features:
+    * Hapi Backend to serve files and take care of routes
+    * Saves opendata query into memory && Adheres to Nominatim API rate limit of 1 request/second
+	* Overly of spending from MaryLand by zipCode on a Leaflet Map (Based on OpeanStreetMap)
+    * Slider to choose number of results shown on the map 
+    * Sorted table showing spendature by Zipcode.
+
+## Building the Docker image
+
+
+## Running the Docker container
+
+
+## A brief description of what you did
+In this section I will be briefly going over what I did for each of the features I implemented
+
+* Hapi Backend to serve files and take care of routes
+There are several changes to our backend. I have included the following routes to serve our frontend application:
+ - /assets/{param*} for our pictures and css stylingsheets.
+ - /components/{param*} to serve our modules and components for the app
+ - /controllers.js to serve our controller
+ - /data/{year} ( GET Method ) - route to get the opendata.maryland.gov for the fiscal year specified. Transforms that data into a 
+   sorted { vendor_zip and amount } array of objects.
+ - /nominatim/{zipcode} ( GET Method ) - route used to query the nominatim API, transforming zipcodes into latitude and longitude. 
+
+* Saves opendata query into memory && Adheres to Nominatim API rate limit of 1 request/second
+In our controller.js we setup up a service to inject our shared variables into our controllers. This allows for global access to different controllers
+(as long as they share a parent module) to the variables. In order to modify and get our variables we attach getter and setter functions. 
+To adhere to Nominatim's rate limit we set our application to query our Hapi backend once/second.
+
+* Overly of spending from Maryland by zipCode on a Leaflet Map (Based on OpeanStreetMap)
+There are several new files and changes 
+ -> map.component.html
+     Contains the html template of the module, contains the angular directives that control the behavior of our doms, and attributes.
+ -> map.component.js
+     Declaration of the map component of the module
+ -> map.module.js
+     Declaration of the map module
+ -> controllers.js (MapController)
+     This is the main file that controllers the functionality of the leaflet map as well as quires our Hapi backend. On initialization the MapController 
+     quires our database for a route that is defined in our backend called '/data/{fiscal_year}'. This is where we put in the year we are looking to access.
+     Once our data is retrieved we save the data into memory, and call the function markLocations(data,count,index). This method ingests our now modified 
+     data from the backend, the number of markers to display, and the index to start from. It calls our backend route /nominatim/{zipcode}, which returns 
+     the latitude and longitude of our zip code. It then dynamically modifies our markers on the map; adding an entry for each item in our data up to the 
+     count of the number of markers needed to be displayed. The most important part is that IF the zip code is not based in Maryland than it skips over 
+     that entry. And finally we setup a function that is able to be called from other controllers that resets all markers and then calls markLocations 
+     with our saved data from open.maryland.gov.
+
+* Slider to choose number of results shown on the map 
+A custom slider with a mouseup directive that calls our MarkLocations function from the MapController
+ -> controllers.js (SliderController)
+Defines our starting value for our slider, and makes a function that gets called from our angular directive for the slider. 
+This function calls our MapController to redisplay markers based on our slider.
+
+* Sorted table showing spendature by Zipcode.
+ -> table.component.html
+     Contains the html template of the table module, also contains the angular directives that dynamically populates our table once the data is loaded.
+ -> table.component.js
+     Declaration of the table component of the module
+ -> table.module.js
+     Declaration of table module
+ -> controllers.js (TableController)
+     Our TableController waits to load the scope of our dataTable variable used to populate our bootstrap table. It checks every 500 ms if our data from
+     our injected service is loaded. If it is, it than simply sets our dataTable to that data.
+
+## A brief description of how you might improve the project
+Given the time there are several things I would improve on the project
+
+* Testing and Swagger implementation(E2E, and Unit Testing)
+For each endpoint on my backend I should be exposing the service to Swagger and testing the endpoint. Given more time I would be writing tests
+for our frontend as well as our backend. 
+
+* Upgrading to the latest Angular and using Typescript
+By upgrading to the latest angular there is more support for 3rd party library integrations. And by using typescript I would simplify the code 
+some more, making it easy to read and debug. The benefits of static checking, interfaces, observables, as well as a host of other features make 
+upgrading to typescript beneficial.
+
+* Functionality of the site.
+Add support to dynamically remove and add markers instead of resting the number of markers on the map to zero each time the slider is changed.
+I would add MDBootstrap to our project, giving it a dynamic and searchable table with all the entries loaded as needed, instead of saving all the data into memory.

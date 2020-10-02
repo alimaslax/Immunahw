@@ -1,0 +1,23 @@
+<!-- Table Componenet -->
+<div ng-controller="TableController">
+  <center><h3>Sorted Table: Amount Spent by Zipcode</h3> </center>
+  <div class="div-table">
+    <table class="table table-striped table-dark">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Vendor Zip</th>
+          <th scope="col">Value ($)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="(key, value) in dataTable">
+          <td>{{ key + 1 }}</td>
+          <td>{{ value.vendor_zip }}</td>
+          <td>{{ value.amount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
