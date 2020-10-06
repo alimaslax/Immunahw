@@ -50,7 +50,11 @@ Snapshot of features:
     * Sorted table showing spendature by Zipcode.
 
 ## Building the Docker image
+Run the following code to build the Docker Image
+docker build -t <your username>/immunahw .
 
+Check to see if Image was built:
+docker images
 
 ## Running the Docker container
 
@@ -66,6 +70,17 @@ There are several changes to our backend. I have included the following routes t
  - /data/{year} ( GET Method ) - route to get the opendata.maryland.gov for the fiscal year specified. Transforms that data into a 
    sorted { vendor_zip and amount } array of objects.
  - /nominatim/{zipcode} ( GET Method ) - route used to query the nominatim API, transforming zipcodes into latitude and longitude. 
+
+     ***
+     Recent Update to Nominatim's API    
+
+     While building the app an update to Nominatim's API no longer supports searching with STATE, COUNTRY, and ZIPCODE
+     This broke my ability to search if a zip code is based in a State, I had to rewrite my server code.
+     The following used to return a data
+     https://nominatim.openstreetmap.org/search.php?state=Maryland&country=USA&postalcode=21022&polygon_geojson=1&format=jsonv2
+     Now only the following returns the correct data
+     https://nominatim.openstreetmap.org/search.php?country=USA&postalcode=21022&polygon_geojson=1&format=jsonv2
+     ***
 
 * Saves opendata query into memory && Adheres to Nominatim API rate limit of 1 request/second
 In our controller.js we setup up a service to inject our shared variables into our controllers. This allows for global access to different controllers
@@ -86,9 +101,8 @@ There are several new files and changes
      Once our data is retrieved we save the data into memory, and call the function markLocations(data,count,index). This method ingests our now modified 
      data from the backend, the number of markers to display, and the index to start from. It calls our backend route /nominatim/{zipcode}, which returns 
      the latitude and longitude of our zip code. It then dynamically modifies our markers on the map; adding an entry for each item in our data up to the 
-     count of the number of markers needed to be displayed. The most important part is that IF the zip code is not based in Maryland than it skips over 
-     that entry. And finally we setup a function that is able to be called from other controllers that resets all markers and then calls markLocations 
-     with our saved data from open.maryland.gov.
+     count of the number of markers needed to be displayed. And finally we setup a function that is able to be called from other controllers that resets 
+     all markers and then calls markLocations with our saved data from open.maryland.gov.
 
 * Slider to choose number of results shown on the map 
 A custom slider with a mouseup directive that calls our MarkLocations function from the MapController
@@ -121,4 +135,5 @@ upgrading to typescript beneficial.
 
 * Functionality of the site.
 Add support to dynamically remove and add markers instead of resting the number of markers on the map to zero each time the slider is changed.
-I would add MDBootstrap to our project, giving it a dynamic and searchable table with all the entries loaded as needed, instead of saving all the data into memory.
+I would also add MDBootstrap to our project, giving it a dynamic and searchable table with all the entries loaded as needed, 
+instead of saving all the data into memory.

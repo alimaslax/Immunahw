@@ -3,9 +3,10 @@
     <leaflet lf-center="maryland" markers="markers" path="path" height="500px" width="100%"></leaflet>
     <div ng-controller="SliderController">
         <div class="slidecontainer">
-            <input ng-mouseup="makeCall()" ng-model="levelvalue" type="range" min="1" max="100" class="slider" id="myRange">
+            <input ng-mouseup="makeCall()" ng-disabled="isDisabled" ng-model="levelvalue" type="range" min="1" max="100" class="slider" id="myRange">
             <div></div>
             <p>Top Results: {{ levelvalue }}</p>
+            <p>Slider Disabled: {{ isDisabled }}</p>
         </div>
     </div>
 </div>

@@ -1,5 +1,5 @@
-/* Todo: fix loading properties of markLocations so that
- * bug causing multiple calls is fixed
+/* @author: Maslax Ali
+ * @Date: 10/06/2020
  *
 **/
 
@@ -26,7 +26,7 @@ app.service('sharedProperties', function () {
 });
 
 // Main controller for Map
-app.controller('MapController', ['$scope', '$http', '$rootScope','sharedProperties', function ($scope, $http, $rootScope,sharedProperties) {
+app.controller('MapController', ['$scope', '$http', '$rootScope', '$timeout', 'sharedProperties', function ($scope, $http, $rootScope, $timeout, sharedProperties) {
     // Fetch the data as soon as MapController initializes
     this.$onInit = function () {
         $scope.markers = {};
@@ -41,10 +41,11 @@ app.controller('MapController', ['$scope', '$http', '$rootScope','sharedProperti
         });
     }
 
+    var timeout;
     // function used to query nominatim with a 1 second delay
     $scope.markLocations = function (data, count, index) {
         $http.get('/nominatim/' + data[index].vendor_zip).then(function mySuccess(response) {
-            // If zipcode is not in Maryland, skip zipcode.
+            // If zipcode is not found, skip.
             if (response.data.lat == undefined) {
                 $scope.markLocations(data, count, index + 1);
                 return response;
@@ -53,7 +54,7 @@ app.controller('MapController', ['$scope', '$http', '$rootScope','sharedProperti
             $scope.markers["m" + index] = {
                 lat: parseFloat(response.data.lat),
                 lng: parseFloat(response.data.lon),
-                message: "total: \n WELCOME " + data[index].amount,
+                message: "Zipcode: " + data[index].vendor_zip + "\n Total: " + data[index].amount,
                 icon: {
                     iconUrl: 'assets/icons/icon.png',
                     iconSize: [40, 40], // size of the icon
@@ -65,9 +66,12 @@ app.controller('MapController', ['$scope', '$http', '$rootScope','sharedProperti
         }, function myError(response) {
             console.log("ERROR");
         });
-        setTimeout(function () {   //  call a 1s setTimeout when the loop is called
+        timeout = $timeout(function () {
             if (count > 1) {
                 $scope.markLocations(data, count - 1, index + 1);
+            }
+            else {
+                $timeout.cancel(timeout);
             } //  ..  setTimeout()
         }, 1000);
     }
@@ -77,21 +81,23 @@ app.controller('MapController', ['$scope', '$http', '$rootScope','sharedProperti
         maryland: {
             lat: 39.2908816,
             lng: -76.610759,
-            zoom: 8
+            zoom: 9
         },
         markers: {}
     });
 
     // Global function to call MarkLocations outside of controller
     $rootScope.$on("CallMarkLocations", function (event, args) {
+        //cancel our timeout and reset markers
         $scope.markers = {};
+        $timeout.cancel(timeout);
         $scope.markLocations(sharedProperties.getProperty(), args.count, 0);
     });
-    
+
 }]);
 
 // Slider Controller
-app.controller('SliderController', ['$scope','$rootScope','sharedProperties', function ($scope,$rootScope,sharedProperties) {
+app.controller('SliderController', ['$scope', '$rootScope', function ($scope, $rootScope) {
     $scope.levelvalue = 3;
     $scope.makeCall = function () {
         $rootScope.$emit("CallMarkLocations", { count: $scope.levelvalue });
@@ -100,10 +106,10 @@ app.controller('SliderController', ['$scope','$rootScope','sharedProperties', fu
 }]);
 
 //Table Controller
-app.controller('TableController', ['$scope', 'sharedProperties', function ($scope,sharedProperties) {
+app.controller('TableController', ['$scope', 'sharedProperties', function ($scope, sharedProperties) {
     $scope.dataTable = {};
-    var loadTable = function(){
-        setTimeout(function () {  
+    var loadTable = function () {
+        setTimeout(function () {
             $scope.dataTable = sharedProperties.getProperty(); //  check if data is loaded
             if (!sharedProperties.getLoading()) {
                 loadTable();

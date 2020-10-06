@@ -109,8 +109,9 @@ server.register([{ register: require('inert') }], function (err) {
         path: "/nominatim/{zipcode}",
         handler: async (request, response) => {
             var data = {};
-            data = await axios.get('https://nominatim.openstreetmap.org/search?state=Maryland&country=USA&postalcode='+request.params.zipcode+'&format=json')
+            data = await axios.get('https://nominatim.openstreetmap.org/search.php?country=USA&postalcode='+request.params.zipcode+'&polygon_geojson=1&format=jsonv2')
                 .then(response => {
+                    console.log(response.data);
                     if(response.data.length == 0){
                         return {};
                     }
