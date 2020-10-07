@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Immuta Homework Assignment",
   "main": "server.js",
+  "private": true,
   "scripts": {
     "start": "node server.js"
   },
