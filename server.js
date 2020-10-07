@@ -104,7 +104,7 @@ server.register([{ register: require('inert') }], function (err) {
         }
     });
 
-    // Get Request for data fisical_year
+    // Get Request for zipcode to latitude and longitude
     server.route({
         method: "GET",
         path: "/nominatim",

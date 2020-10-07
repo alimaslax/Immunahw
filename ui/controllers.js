@@ -97,8 +97,19 @@ app.controller('MapController', ['$scope', '$http', '$rootScope', '$timeout', 's
 }]);
 
 // Slider Controller
-app.controller('SliderController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+app.controller('SliderController', ['$scope', '$rootScope', 'sharedProperties', function ($scope, $rootScope, sharedProperties) {
     $scope.levelvalue = 3;
+    $scope.max = 100;
+    $scope.isDisabled = true;
+    // watch our data for change
+    $scope.$watch(function () { return sharedProperties.getProperty(); }, function (newVal) {
+        $scope.max = Object.keys(newVal).length;
+        // fixes bug of moving slider before length of our data is returned
+        if (Object.keys(newVal).length > 1) {
+            $scope.isDisabled = false;
+        }
+    }, true);
+
     $scope.makeCall = function () {
         $rootScope.$emit("CallMarkLocations", { count: $scope.levelvalue });
     };
@@ -108,13 +119,8 @@ app.controller('SliderController', ['$scope', '$rootScope', function ($scope, $r
 //Table Controller
 app.controller('TableController', ['$scope', 'sharedProperties', function ($scope, sharedProperties) {
     $scope.dataTable = {};
-    var loadTable = function () {
-        setTimeout(function () {
-            $scope.dataTable = sharedProperties.getProperty(); //  check if data is loaded
-            if (!sharedProperties.getLoading()) {
-                loadTable();
-            }//  ..  setTimeout()
-        }, 500);
-    }
-    loadTable();
+    // Watch our data to fill the table
+    $scope.$watch(function () { return sharedProperties.getProperty(); }, function (newVal) {
+        $scope.dataTable = newVal;
+    }, true);
 }]);
