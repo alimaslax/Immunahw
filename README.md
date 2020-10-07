@@ -144,6 +144,7 @@ some more, making it easy to read and debug. The benefits of static checking, in
 upgrading to typescript beneficial.
 
 * Functionality of the site.
-Add support to dynamically remove and add markers instead of resting the number of markers on the map to zero each time the slider is changed.
-I would also add MDBootstrap to our project, giving it a dynamic and searchable table with all the entries loaded as needed, 
+- Add support to dynamically remove and add markers instead of resting the number of markers on the map to zero each time the slider is changed.
+- I would also add MDBootstrap to our project, giving it a dynamic and searchable table with all the entries loaded as needed, 
 instead of saving all the data into memory.
+- Remove all markers that are outside of Maryland Zipcode
