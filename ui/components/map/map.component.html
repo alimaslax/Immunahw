@@ -4,9 +4,8 @@
     <div ng-controller="SliderController">
         <div class="slidecontainer">
             <input ng-mouseup="makeCall()" ng-disabled="isDisabled" ng-model="levelvalue" type="range" min="1" max="100" class="slider" id="myRange">
-            <div></div>
             <p>Top Results: {{ levelvalue }}</p>
-            <p>Slider Disabled: {{ isDisabled }}</p>
+            <div></div>
         </div>
     </div>
 </div>

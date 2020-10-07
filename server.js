@@ -86,12 +86,13 @@ server.register([{ register: require('inert') }], function (err) {
 
     //========= Start of API ====== //
 
+    // Get Request to fetch initial data from OpenData Maryland
     server.route({
         method: "GET",
-        path: "/data/{year}",
+        path: "/data",
         handler: async (request, response) => {
             var data = {};
-            data = await axios.get('https://opendata.maryland.gov/resource/gja3-vy5r.json?fiscal_year='+request.params.year+'&$limit=50000')
+            data = await axios.get('https://opendata.maryland.gov/resource/gja3-vy5r.json?fiscal_year='+request.query.year+'&$limit=50000')
                 .then(response => {
                     return helper.spentByZipcode(response.data);
                 })
@@ -106,12 +107,11 @@ server.register([{ register: require('inert') }], function (err) {
     // Get Request for data fisical_year
     server.route({
         method: "GET",
-        path: "/nominatim/{zipcode}",
+        path: "/nominatim",
         handler: async (request, response) => {
             var data = {};
-            data = await axios.get('https://nominatim.openstreetmap.org/search.php?country=USA&postalcode='+request.params.zipcode+'&polygon_geojson=1&format=jsonv2')
+            data = await axios.get('https://nominatim.openstreetmap.org/search.php?country=USA&postalcode='+request.query.zipcode+'&polygon_geojson=1&format=jsonv2')
                 .then(response => {
-                    console.log(response.data);
                     if(response.data.length == 0){
                         return {};
                     }

@@ -50,15 +50,25 @@ Snapshot of features:
     * Sorted table showing spendature by Zipcode.
 
 ## Building the Docker image
-Run the following code to build the Docker Image
+Run the following command to build the Docker Image
+```
 docker build -t <your username>/immunahw .
-
-Check to see if Image was built:
+```
+Check to see if Image was built correctly:
+```
 docker images
-
+```
 ## Running the Docker container
+Run the following command to run a built Image.
+```
+docker run -d --name [name] -p [external port]:3000 IMAGE
+```
 
-
+the example below binds our localhost port 3000 to port 3000 of the container, -d is for 
+run container in background and print container ID
+```
+docker run -d --name immunahw -p 3000:3000 alimaslax/immunahw
+```
 ## A brief description of what you did
 In this section I will be briefly going over what I did for each of the features I implemented
 

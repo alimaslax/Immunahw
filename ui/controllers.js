@@ -30,7 +30,7 @@ app.controller('MapController', ['$scope', '$http', '$rootScope', '$timeout', 's
     // Fetch the data as soon as MapController initializes
     this.$onInit = function () {
         $scope.markers = {};
-        $http.get('/data/2015').then(function mySuccess(response) {
+        $http.get('/data?year=2015').then(function mySuccess(response) {
             //share recieved data
             sharedProperties.setProperty(response.data);
             sharedProperties.setLoading(true);
@@ -44,7 +44,7 @@ app.controller('MapController', ['$scope', '$http', '$rootScope', '$timeout', 's
     var timeout;
     // function used to query nominatim with a 1 second delay
     $scope.markLocations = function (data, count, index) {
-        $http.get('/nominatim/' + data[index].vendor_zip).then(function mySuccess(response) {
+        $http.get('/nominatim?zipcode=' + data[index].vendor_zip).then(function mySuccess(response) {
             // If zipcode is not found, skip.
             if (response.data.lat == undefined) {
                 $scope.markLocations(data, count, index + 1);
