@@ -52,7 +52,7 @@ Snapshot of features:
 ## Building the Docker image
 Run the following command to build the Docker Image
 ```
-docker build -t <your username>/immunahw .
+docker build -t <your username>/maryland-spending .
 ```
 Check to see if Image was built correctly:
 ```
@@ -67,7 +67,7 @@ docker run -d --name [name] -p [external port]:3000 IMAGE
 the example below binds our localhost port 3000 to port 3000 of the container, -d is for 
 run container in background and print container ID
 ```
-docker run -d --name immunahw -p 3000:3000 alimaslax/immunahw
+docker run -d --name maryland-spending -p 3000:3000 alimaslax/maryland-spending
 ```
 ## A brief description of what you did
 In this section I will be briefly going over what I did for each of the features I implemented
